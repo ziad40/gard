@@ -1,8 +1,6 @@
 from fastapi import Depends, FastAPI
 from sqlmodel import Field, Session, SQLModel, create_engine, select
-from fastapi import Depends, HTTPException, Query
-from typing import Annotated
-from .model.branch_category_product import BranchCategoryProductLink
+from .model.branch_product import BranchProductLink
 from .model.branch_category import BranchCategoryLink
 from .model.branch import Branch
 from .model.category import Category
