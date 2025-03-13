@@ -2,3 +2,5 @@ fastapi[standard]
 sqlmodel
 pymysql
 python-dotenv
+pyjwt
+passlib[bcrypt]
