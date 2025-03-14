@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, Response
 from pydantic import BaseModel
 from app.service.auth import AuthService
-from app.dependencies import SessionDep
+from app.dependencies import SessionDep, BranchDep
 
 
 router = APIRouter(
@@ -30,3 +30,8 @@ def login(request: LoginRequest, db: SessionDep):
         return {"message": "Branch logged in successfully", "branch id": branch.id,"branch name" : branch.name,  "token" : token}
     except HTTPException as e:
         raise e
+
+@router.get('/auth')
+def auth(branch: BranchDep):
+    token = AuthService.create_access_token(branch.id, branch.name)
+    return {"branch id": branch.id,"branch name" : branch.name,  "token" : token}
