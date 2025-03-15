@@ -1,13 +1,13 @@
 from fastapi import Depends, FastAPI
 from sqlmodel import Field, Session, SQLModel, create_engine, select
-from .model.branch_product import BranchProductLink
-from .model.branch_category import BranchCategoryLink
-from .model.branch import Branch
-from .model.category import Category
-from .model.history import History, ProductHistory
-from .model.product import Product
+from app.model.branch_category_product import BranchCategoryProduct
+from app.model.branch_category import BranchCategory
+from app.model.branch import Branch
+from app.model.category import Category
+from app.model.history import History, ProductHistory
+from app.model.product import Product
 
-from .routers import branch, category, product, stock, auth
+from app.routers import branch, category, product, stock, auth
 
 import os
 from dotenv import load_dotenv

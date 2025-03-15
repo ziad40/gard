@@ -1,5 +1,9 @@
-from sqlmodel import Field, SQLModel
+from sqlmodel import Field, SQLModel, Relationship
 import datetime
+from typing import Optional, List, TYPE_CHECKING
+from app.model.branch import Branch
+from app.model.product import Product
+
 
 class History(SQLModel, table=True):
     id: int | None = Field(default=None, primary_key=True)
@@ -7,6 +11,8 @@ class History(SQLModel, table=True):
     created_at: datetime.datetime = Field(
         default_factory=datetime.datetime.utcnow,
     )
+    branch: Optional[Branch] = Relationship(sa_relationship_kwargs={"lazy": "joined"})
+    products : List["ProductHistory"] = Relationship(back_populates="history")
 
 
 class ProductHistory(SQLModel, table=True):
@@ -17,4 +23,5 @@ class ProductHistory(SQLModel, table=True):
     real_count: int | None = Field(default=None)
     image : str | None = Field(default=None)
 
-
+    product: Optional[Product] = Relationship(sa_relationship_kwargs={"lazy": "joined"})
+    history: Optional["History"] = Relationship(back_populates="products")

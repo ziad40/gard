@@ -1,10 +1,12 @@
 from sqlmodel import Field, SQLModel, Relationship
-from typing import Optional, TYPE_CHECKING
+from typing import TYPE_CHECKING, List
 if TYPE_CHECKING:
-    from app.model.category import Category
+    from app.model.branch_category_product import BranchCategoryProduct
 
 class Product(SQLModel, table=True):
     id: int | None = Field(default=None, primary_key=True)
     name: str = Field(index=True)
-    category_id: int | None = Field(default=None, foreign_key="category.id")
-    category: Optional["Category"] = Relationship(back_populates="products")
+    
+    categories: List["BranchCategoryProduct"] = Relationship(
+        back_populates="product"
+    )

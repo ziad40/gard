@@ -1,6 +1,7 @@
 from sqlmodel import Field, SQLModel, Relationship
-from app.model.category import Category
-from app.model.branch_category import BranchCategoryLink
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from app.model.branch_category import BranchCategory
 
 
 class Branch(SQLModel, table=True):
@@ -9,7 +10,7 @@ class Branch(SQLModel, table=True):
     code: str = Field(index=True)
     password: str = Field(default=None)
 
-    categories: list["Category"] = Relationship(link_model=BranchCategoryLink)
+    categories: list["BranchCategory"] = Relationship(back_populates="branch")
 
 
 
