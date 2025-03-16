@@ -17,5 +17,5 @@ class BranchCategoryProduct(SQLModel, table=True):
     
     product : Product = Relationship(back_populates="categories")
 
-    priority: int = Field(default=None)
+    priority: int = Field(default=None, unique=True)
     quantity: int = Field(default=None)
