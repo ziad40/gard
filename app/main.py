@@ -41,6 +41,7 @@ def on_startup():
 
 app.include_router(branch.router)
 app.include_router(auth.router)
+app.include_router(category.router)
 
 @app.get("/")
 async def root():

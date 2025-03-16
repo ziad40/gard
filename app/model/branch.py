@@ -1,5 +1,5 @@
 from sqlmodel import Field, SQLModel, Relationship
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, List
 if TYPE_CHECKING:
     from app.model.branch_category import BranchCategory
 
@@ -10,7 +10,7 @@ class Branch(SQLModel, table=True):
     code: str = Field(index=True)
     password: str = Field(default=None)
 
-    categories: list["BranchCategory"] = Relationship(back_populates="branch")
+    categories: List["BranchCategory"] = Relationship(back_populates="branch")
 
 
 
