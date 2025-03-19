@@ -19,7 +19,7 @@ class RegisterRequest(LoginRequest):
 def register(request: RegisterRequest, db: SessionDep):
     try:
         branch, token = AuthService.register(db, request.branchname, request.password, request.code)
-        return {"message": "Branch registered successfully", "branch id": branch.id, "token" : token}
+        return {"branch id": branch.id, "token" : token}
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
     
@@ -27,7 +27,7 @@ def register(request: RegisterRequest, db: SessionDep):
 def login(request: LoginRequest, db: SessionDep):
     try:
         branch, token = AuthService.login(db, request.password, request.code)
-        return {"message": "Branch logged in successfully", "branch id": branch.id,"branch name" : branch.name,  "token" : token}
+        return {"branch id": branch.id,"branch name" : branch.name,  "token" : token}
     except HTTPException as e:
         raise e
 

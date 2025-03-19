@@ -1,6 +1,6 @@
 from sqlmodel import Field, SQLModel, Relationship
 from app.model.product import Product
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Optional
 if TYPE_CHECKING:
     from app.model.branch_category import BranchCategory
 
@@ -17,5 +17,5 @@ class BranchCategoryProduct(SQLModel, table=True):
     
     product : Product = Relationship(back_populates="categories")
 
-    priority: int = Field(default=None, unique=True)
+    priority: Optional[int] = Field(default=None, unique=True)
     quantity: int = Field(default=None)

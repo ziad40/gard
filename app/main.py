@@ -7,7 +7,7 @@ from app.model.category import Category
 from app.model.history import History, ProductHistory
 from app.model.product import Product
 
-from app.routers import branch, category, product, stock, auth
+from app.routers import branch, category, history, product, auth
 
 import os
 from dotenv import load_dotenv
@@ -42,6 +42,7 @@ def on_startup():
 app.include_router(branch.router)
 app.include_router(auth.router)
 app.include_router(category.router)
+app.include_router(product.router)
 
 @app.get("/")
 async def root():

@@ -6,7 +6,7 @@ from app.model.branch_category_product import BranchCategoryProduct
 
 router = APIRouter(
         prefix="/branch/category/product",
-        tags=["category"]
+        tags=["products"]
     )
 
 @router.get("/")
@@ -22,3 +22,9 @@ def get_products_in_category_in_branch(category_id: int, branch : BranchDep, ses
         }
         for p in products
     ]
+
+@router.put("/update-order")
+def update_product_order(category_id: int, product_ids: List[int], branch : BranchDep, session : SessionDep):
+    branch_service = BranchService(branch, session)
+    branch_service.update_products_order_in_category(category_id, product_ids)
+    return {"message": "Categories order updated successfully"}

@@ -1,7 +1,7 @@
 from app.model.branch import Branch
 from app.model.branch_category import BranchCategory
 from app.model.branch_category_product import BranchCategoryProduct
-from sqlmodel import Session, select, case, and_
+from sqlmodel import Session, select, case, and_, update
 from typing import List
 
 class BranchService:
@@ -74,3 +74,31 @@ class BranchService:
             self.session.commit()
 
         return products_with_priority + products_without_priority
+    
+    def update_category_order(self, category_ids:List[int]):
+        for i, category_id in enumerate(category_ids, start=1):
+            self.session.exec(
+                update(BranchCategory).where(
+                    and_(
+                        BranchCategory.branch_id == self.branch.id,
+                        BranchCategory.category_id == category_id
+                    )
+                ).values(priority=i)
+            )
+        self.session.commit()
+
+    
+    def update_products_order_in_category(self, category_id:int, product_ids:List[int]):
+        for i, product_id in enumerate(product_ids, start=1):
+            self.session.exec(
+                update(BranchCategoryProduct).where(
+                    and_(
+                        BranchCategoryProduct.branch_category_branch_id == self.branch.id,
+                        BranchCategoryProduct.branch_category_category_id == category_id,
+                        BranchCategoryProduct.product_id == product_id
+                    )
+                ).values(priority=i)
+            )
+        self.session.commit()
+
+    

@@ -1,4 +1,4 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Response
 from app.dependencies import BranchDep, SessionDep
 from app.service.branch import BranchService
 from typing import List
@@ -21,3 +21,9 @@ def get_categories_in_branch(branch : BranchDep, session : SessionDep):
         }
         for bc in categories
     ]
+
+@router.put("/update-order")
+def update_category_order(category_ids: List[int], branch : BranchDep, session : SessionDep):
+    branch_service = BranchService(branch, session)
+    branch_service.update_category_order(category_ids)
+    return Response(status_code=204)
