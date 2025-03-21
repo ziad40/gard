@@ -32,10 +32,11 @@ def create_db_and_tables():
 
 
 app = FastAPI()
-
+UPLOAD_FOLDER = os.getenv("UPLOADS")
 
 @app.on_event("startup")
 def on_startup():
+    os.makedirs(UPLOAD_FOLDER, exist_ok=True)
     create_db_and_tables()
 
 

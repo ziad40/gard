@@ -1,13 +1,17 @@
-from fastapi import APIRouter, Response
+from fastapi import APIRouter, Response, HTTPException
 from app.dependencies import BranchDep, SessionDep
 from app.service.branch import BranchService
 from typing import List
 from app.model.branch_category import BranchCategory
+from pydantic import BaseModel
 
 router = APIRouter(
         prefix="/branch/category",
         tags=["category"]
     )
+
+class updateCategoryOrderRequest(BaseModel):
+    category_ids: List[int]
 
 @router.get("/")
 def get_categories_in_branch(branch : BranchDep, session : SessionDep):
@@ -23,7 +27,10 @@ def get_categories_in_branch(branch : BranchDep, session : SessionDep):
     ]
 
 @router.put("/update-order")
-def update_category_order(category_ids: List[int], branch : BranchDep, session : SessionDep):
+def update_category_order(request : updateCategoryOrderRequest, branch : BranchDep, session : SessionDep):
     branch_service = BranchService(branch, session)
-    branch_service.update_category_order(category_ids)
-    return Response(status_code=204)
+    try:
+        branch_service.update_category_order(request.category_ids)
+        return Response(status_code=204)  # No content on success
+    except ValueError as e:  
+        raise HTTPException(status_code=400, detail=str(e))

@@ -48,8 +48,12 @@ class InventoryService:
         ).first()
 
         if not history:
-            return None
-        
+            raise ValueError("No Such Inventory Exists.")
+        if request.prev_product_id is None and history.next_product_order != 1:
+            raise ValueError("You must provide a previous product details.")
+        if request.prev_product_id is not None and history.next_product_order != 1 and history.prev_product_id != request.prev_product_id:
+            raise ValueError("Previous product id does not match the one You should provide.")
+
         product:BranchCategoryProduct = self.session.exec(
             select(BranchCategoryProduct).where(
                 and_(
@@ -60,12 +64,18 @@ class InventoryService:
             )
         ).first()
 
-        history.next_product_order += 1
-        if request.prev_product_id is not None:
+        if not product:
+            history.next_product_order = -1
+        else:
+            history.prev_product_id = product.product_id
+            history.next_product_order += 1
+
+        if request.prev_product_id is not None and history.next_product_order != 2:
             new_product_history = ProductHistory(product_id=request.prev_product_id,
                                                  history_id=history.id,
                                                  stock_count=request.prev_product_count_stock,
-                                                 real_count=request.prev_product_current_count)
+                                                 real_count=request.prev_product_current_count,
+                                                 state = request.state)
             self.session.add(new_product_history)
             self.session.flush()
             if image:
@@ -89,7 +99,7 @@ class InventoryService:
     def __store_file(self, image: UploadFile, image_id:int) -> str:
         """Save file to disk and return the file's accessible URL"""
         image_name = str(image_id) + "_" + image.filename
-        file_path = os.path.join("uploads", image_name)
+        file_path = os.path.join(os.getenv("UPLOADS"), image_name)
 
         # Save file to disk
         with open(file_path, "wb") as buffer:
@@ -97,8 +107,3 @@ class InventoryService:
 
         # Return the full URL
         return file_path
-
-    
-    
-    
-        

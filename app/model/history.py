@@ -11,6 +11,7 @@ class History(SQLModel, table=True):
     branch_id: int | None = Field(default=None, foreign_key="branch.id")
     category_id: int | None = Field(default=None, foreign_key="category.id")
     next_product_order: int | None = Field(default=None)
+    prev_product_id: int | None = Field(default=None)
     created_at: datetime.datetime = Field(
         default_factory=datetime.datetime.utcnow,
     )
@@ -25,6 +26,7 @@ class ProductHistory(SQLModel, table=True):
     history_id: int | None = Field(default=None, foreign_key="history.id")
     stock_count: int | None = Field(default=None)
     real_count: int | None = Field(default=None)
+    state: str | None = Field(default=None)
     image : str | None = Field(default=None)
 
     product: Optional[Product] = Relationship(sa_relationship_kwargs={"lazy": "joined"})

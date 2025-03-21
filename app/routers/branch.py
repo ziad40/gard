@@ -7,8 +7,8 @@ from typing import List, Optional
 router = APIRouter()
 
 router = APIRouter(
-        prefix="/branch/",
-        tags=["products"]
+        prefix="/branch",
+        tags=["branch"]
     )
 
 class newHistoryRequest(BaseModel):
@@ -19,6 +19,7 @@ class NextProductRequest(BaseModel):
     prev_product_id: Optional[int] = None
     prev_product_count_stock: Optional[int] = None
     prev_product_current_count: Optional[int] = None
+    state: Optional[str] = None
 
 
 @router.post("/start-inventory")
@@ -41,34 +42,39 @@ def next_product(
     prev_product_id: Optional[int] = Form(None),
     prev_product_count_stock: Optional[int] = Form(None),
     prev_product_current_count: Optional[int] = Form(None),
-    image: UploadFile = File(...)
+    state: Optional[str] = Form(None),
+    image: Optional[UploadFile] = File(None)
 ):
     request = NextProductRequest(
         iventory_id=iventory_id,
         prev_product_id=prev_product_id,
         prev_product_count_stock=prev_product_count_stock,
-        prev_product_current_count=prev_product_current_count
+        prev_product_current_count=prev_product_current_count,
+        state=state
     )
 
     # Validate that either all optional params are provided or none of them
-    optional_params = [prev_product_id, prev_product_count_stock, prev_product_current_count]
+    optional_params = [prev_product_id, prev_product_count_stock, prev_product_current_count, image, state]
     
     if any(param is not None for param in optional_params) and not all(param is not None for param in optional_params):
-        raise HTTPException(status_code=400, detail="Either provide all optional parameters or none.")
+        raise HTTPException(status_code=400, detail="Either provide all optional parameters (prev_product_id, prev_product_count_stock, prev_product_current_count, state, image) or none.")
 
 
     inv_service = InventoryService(branch, session)
-    product = inv_service.get_next_product_in_category(request, image)
+    try:
+        product = inv_service.get_next_product_in_category(request, image)
 
-    if not product:
-        return {"message": "No more products in this category not processed"}
+        if not product:
+            return {"message": "No more products in this category not processed"}
 
-    return {
-        "product_id": product.product_id,
-        "product_name": product.product.name,
-        "product_quantity": product.quantity,
-        "priority": product.priority
-    }
+        return {
+            "product_id": product.product_id,
+            "product_name": product.product.name,
+            "product_quantity": product.quantity,
+            "priority": product.priority
+        }
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
 
 
 @router.get('/inventory/unfinished')
