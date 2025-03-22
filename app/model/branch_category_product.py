@@ -8,10 +8,10 @@ if TYPE_CHECKING:
 
 class BranchCategoryProduct(SQLModel, table=True):
     branch_category_branch_id: int = Field(
-        foreign_key="branchcategory.branch_id", primary_key=True
+        foreign_key="branch.id", primary_key=True
     )
     branch_category_category_id: int = Field(
-        foreign_key="branchcategory.category_id", primary_key=True
+        foreign_key="category.id", primary_key=True
     )
     product_id: int | None = Field(default=None, foreign_key="product.id", primary_key=True)
     

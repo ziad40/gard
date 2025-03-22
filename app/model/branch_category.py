@@ -1,4 +1,4 @@
-from sqlmodel import Field, SQLModel, Relationship
+from sqlmodel import Field, SQLModel, Relationship, UniqueConstraint
 from typing import List, Optional
 from app.model.branch import Branch
 from app.model.category import Category
@@ -12,3 +12,7 @@ class BranchCategory(SQLModel, table=True):
 
     branch: Branch = Relationship(back_populates="categories")
     category: Category = Relationship(back_populates="branches")
+
+    __table_args__ = (
+        UniqueConstraint("branch_id", "category_id", name="uq_branch_category"),
+    )
