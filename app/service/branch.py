@@ -3,6 +3,7 @@ from app.model.branch_category import BranchCategory
 from app.model.branch_category_product import BranchCategoryProduct
 from sqlmodel import Session, select, case, and_, update, func
 from typing import List
+from app.service.inventory import InventoryService
 
 class BranchService:
     def __init__(self, branch : Branch, session : Session):
@@ -96,6 +97,10 @@ class BranchService:
     
     def update_products_order_in_category(self, category_id:int, product_ids:List[int]):
         try:
+            inventory_service = InventoryService(self.branch, self.session)
+            if len(inventory_service.get_unfinished_inventory_in_categoty(category_id)) != 0:
+                raise ValueError("Cannot update category order while there are unfinished inventories")
+            
             if self.count_branch_category_products(category_id) != len(product_ids):
                 raise ValueError("Number of products in the category does not match the provided list")
             

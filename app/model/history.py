@@ -11,13 +11,15 @@ class History(SQLModel, table=True):
     branch_id: int | None = Field(default=None, foreign_key="branch.id")
     category_id: int | None = Field(default=None, foreign_key="category.id")
     next_product_order: int | None = Field(default=None)
-    prev_product_id: int | None = Field(default=None)
+    prev_product_id: int | None = Field(default=None, foreign_key="product.id")
     created_at: datetime.datetime = Field(
         default_factory=datetime.datetime.utcnow,
     )
     branch: Optional[Branch] = Relationship(sa_relationship_kwargs={"lazy": "joined"})
     category: Optional[Category] = Relationship(sa_relationship_kwargs={"lazy": "joined"})
     products : List["ProductHistory"] = Relationship(back_populates="history")
+    prev_product: Optional["Product"] = Relationship(sa_relationship_kwargs={"lazy": "joined"})
+    
 
 
 class ProductHistory(SQLModel, table=True):

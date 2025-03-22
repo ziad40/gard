@@ -76,6 +76,22 @@ def next_product(
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 
+@router.get('/category/current-product')
+def current_product(branch : BranchDep, session : SessionDep, iventory_id: int):
+    inv_service = InventoryService(branch, session)
+    try:
+        product = inv_service.get_current_product_in_category(iventory_id)
+        if not product:
+            return None
+        return {
+            "product_id": product.product_id,
+            "product_name": product.product.name,
+            "product_quantity": product.quantity,
+            "priority": product.priority
+        }
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
 
 @router.get('/inventory/unfinished')
 def get_unfinished_inventories(branch : BranchDep, session : SessionDep):

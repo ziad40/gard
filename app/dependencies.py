@@ -49,8 +49,6 @@ async def get_current_branch(token: TokenDep, session: SessionDep):
         detail="Could not validate credentials",
         headers={"WWW-Authenticate": "Bearer"},
     )
-    print("tokem :", token)
-    print(type(token))
     try:
         payload = jwt.decode(token, os.getenv('SECRET_KEY'), algorithms=[os.getenv('ALGORITHM')])
         branch_name = payload.get("branch_name")

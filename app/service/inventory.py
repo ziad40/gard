@@ -85,7 +85,26 @@ class InventoryService:
         self.session.commit()
         return product
 
+    def get_current_product_in_category(self, iventory_id:int):
+        history:History = self.session.exec(
+            select(History).where(
+                History.id == iventory_id
+            )
+        ).first()
 
+        if not history:
+            raise ValueError("No Such Inventory Exists.")
+        return self.session.exec(
+            select(BranchCategoryProduct).where(
+                and_(
+                    BranchCategoryProduct.branch_category_branch_id == self.branch.id,
+                    BranchCategoryProduct.branch_category_category_id == history.category_id,
+                    BranchCategoryProduct.priority == history.next_product_order-1
+                )
+            )
+        ).first()
+        
+        
     def get_unfinished_inventory(self):
         res = self.session.exec(
             select(History)
@@ -95,6 +114,35 @@ class InventoryService:
                 ))
             ).all()
         return res
+    
+    def get_unfinished_inventory_in_categoty(self, category_id : int):
+        res = self.session.exec(
+            select(History)
+            .where(and_(
+                    History.next_product_order != -1,
+                    History.branch_id == self.branch.id,
+                    History.category_id == category_id
+                ))
+            ).all()
+        print(res)
+        return res
+    
+    def get_branch_history(self):
+        return self.session.exec(
+            select(History).where(
+                History.branch_id == self.branch.id
+            )
+        ).all()
+    
+    def get_inventory_details(self, inventory_id):
+        history = self.session.exec(
+            select(History).where(
+                History.id == inventory_id
+            )
+        ).first()
+        if not history or history is not None and history.branch_id != self.branch.id:
+            raise ValueError("No Such Inventory Exists.")
+        return history.products
     
     def __store_file(self, image: UploadFile, image_id:int) -> str:
         """Save file to disk and return the file's accessible URL"""
