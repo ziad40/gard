@@ -22,7 +22,7 @@ class NextProductRequest(BaseModel):
     state: Optional[str] = None
 
 
-@router.post("/start-inventory")
+@router.post("/start-inventory", description="Branch start inventory operation for some category and get a new inventory with id to process stock")
 def start(request: newHistoryRequest, branch : BranchDep, session : SessionDep ):
     inv_service = InventoryService(branch, session)
     history : History= inv_service.start_inventory(request.category_id)
@@ -34,7 +34,12 @@ def start(request: newHistoryRequest, branch : BranchDep, session : SessionDep )
     }
 
 
-@router.post("/category/next-product")
+@router.post("/category/next-product", description="The most important endpoint where it process inventory process "
+"-- it fetch next product from stock to process stock "
+"-- if it is first product in category, then endpoint return the next product"
+"-- otherwise user should provide previous product details like current quantity in branch and quantity from stock (which I provide) and image of product."
+"-- and state of product (you can treat it as notes about product)"
+"--")
 def next_product(
     branch : BranchDep,
     session : SessionDep,
@@ -76,7 +81,10 @@ def next_product(
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 
-@router.get('/category/current-product')
+@router.get('/category/current-product', description="this endpoint is used to fetch the current product that needs to be processed"
+"it should NOT be used in normal operation"
+"-- we use it in case of any problem happen or interruptions of internet lose connection while processing"
+"-- so it is used to know where we have stopped")
 def current_product(branch : BranchDep, session : SessionDep, iventory_id: int):
     inv_service = InventoryService(branch, session)
     try:
@@ -93,7 +101,7 @@ def current_product(branch : BranchDep, session : SessionDep, iventory_id: int):
         raise HTTPException(status_code=400, detail=str(e))
 
 
-@router.get('/inventory/unfinished')
+@router.get('/inventory/unfinished', description="fetch all unfinished inventory that have not completed and we USE current-product end-product to know where to continue the process")
 def get_unfinished_inventories(branch : BranchDep, session : SessionDep):
     inv_service = InventoryService(branch, session)
     unfinished_inventories : List[History] = inv_service.get_unfinished_inventory()

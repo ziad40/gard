@@ -10,10 +10,10 @@ load_dotenv()
 
 router = APIRouter(
         prefix="/history",
-        tags=["category"]
+        tags=["history"]
     )
 
-@router.get('/')
+@router.get('/', description="fetch all inventories related to branch with overview details (id, start time, category, status, last product (if inventory is not finished))")
 def get_all_histories(branch: BranchDep, session: SessionDep):
     inv_service = InventoryService(branch, session)
     histories : List[History] = inv_service.get_branch_history()
@@ -35,7 +35,7 @@ def get_all_histories(branch: BranchDep, session: SessionDep):
                 for history in histories
             ]
 
-@router.get('/details')
+@router.get('/details', description="fetch specific information about inventory and what has happened in it for all its products (HISTORY of process)")
 def details(branch: BranchDep, session: SessionDep, inventory_id:int):
     inv_service = InventoryService(branch, session)
     try:

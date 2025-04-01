@@ -6,11 +6,13 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-router = APIRouter()
+router = APIRouter(
+    tags=["media"]
+)
 
 UPLOADS = os.getenv('UPLOADS') # Define base folder
 
-@router.get("/uploads/{media_path:path}")  # Hardcode 'uploads' in the route
+@router.get("/uploads/{media_path:path}", description="user can fetch any media by their url")  # Hardcode 'uploads' in the route
 def fetch_media(media_path: str, branch: BranchDep):
 
     # Construct the absolute path to the file
