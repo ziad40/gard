@@ -51,23 +51,28 @@ app.include_router(media.router)
 async def root():
     return {
         "message": "Hello, Gard application! You can now access endpoints.",
-        "workflow": {
-            "1. login with branch"
-            "2. navigate branch"
-            "2.1 get branch categories in some order (change order if needed)."
-            "2.2 get products in each category in some order (change order if needed)."
-            "________________________________________________________________"
-            "3. Staer inventory process"
-            "3.1 get all categories in branch to start inventory process with each category."
-            "3.2 start inventory process for each category."
-            "3.3 get products in each category and provide details of each finished product to save data to history."
-            "________________________________________________________________"
-            "4. get inventory details (History)"
-            "4.1 get all history records (finished and unfinished)."
-            "4.2 get details of each finished product in inventory."
-            "4.3 continue unfinished inventory process by fetch current product endpoint. "
-            "You can also make it available at the start of application as reminder"
-
-        },
+        "workflow": [
+            "1. Login with branch",
+            "2. Navigate branch",
+            {
+                "2.1": "Get branch categories in some order (change order if needed).",
+                "2.2": "Get products in each category in some order (change order if needed)."
+            },
+            "________________________________________________________________",
+            "3. Start inventory process",
+            {
+                "3.1": "Get all categories in branch to start inventory process with each category.",
+                "3.2": "Start inventory process for each category.",
+                "3.3": "Get products in each category and provide details of each finished product to save data to history."
+            },
+            "________________________________________________________________",
+            "4. Get inventory details (History)",
+            {
+                "4.1": "Get all history records (finished and unfinished).",
+                "4.2": "Get details of each finished product in inventory.",
+                "4.3": "Continue unfinished inventory process by fetching the current product endpoint."
+            },
+            "You can also make it available at the start of the application as a reminder."
+        ],
         "docs": "Visit http://34.165.223.128:8000/docs to see API documentation."
     }
