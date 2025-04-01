@@ -49,4 +49,4 @@ app.include_router(media.router)
 
 @app.get("/")
 async def root():
-    return {"message": "Hello Bigger Applications v2!"}
+    return {"message": "Hello Bigger Applications v2..!"}
