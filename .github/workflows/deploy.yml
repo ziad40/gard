@@ -30,4 +30,4 @@ jobs:
           SSH_USERNAME: zizoabuelkher
         
         run: |
-          ssh $SSH_USERNAME@$SERVER_IP "cd ~/home/$SSH_USERNAME/gard && git pull && docker-compose up --build -d"
+          ssh $SSH_USERNAME@$SERVER_IP "ls && cd ~/ && ls && cd ~/home/$SSH_USERNAME/gard && git pull && docker-compose up --build -d"
