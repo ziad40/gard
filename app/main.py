@@ -49,4 +49,4 @@ app.include_router(media.router)
 
 @app.get("/")
 async def root():
-    return {"message": "Hello Bigger Applications! remove ssh key of server from account... second trial"}
+    return {"message": "Hello Bigger Applications! remove ssh key of server from account... third trial"}
