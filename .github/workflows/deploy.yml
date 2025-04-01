@@ -1,0 +1,28 @@
+name: Deploy to Google Cloud
+
+on:
+  push:
+    branches:
+      - main  # Run on push to main branch
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up SSH Key
+        env:
+          SSH_PRIVATE_KEY: ${{secrets.SSH_PRIVATE_KEY}}
+          SERVER_IP: ${{secrets.SERVER_IP}}
+        run: |
+          mkdir -p ~/.ssh
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H $SERVER_IP >> ~/.ssh/known_hosts
+
+      - name: Deploy Code to Server
+        run: |
+          ssh zizoabuelkher@$SERVER_IP "cd /home/zizoabuelkher/gard && git pull && docker-compose up --build -d"
