@@ -24,7 +24,6 @@ jobs:
           ssh-keyscan -H $SERVER_IP >> ~/.ssh/known_hosts
 
       - name: Deploy Code to Server
-        working-directory: /home/zizoabuelkher/gard
         env:
           SERVER_IP: 34.165.223.128
           SSH_USERNAME: zizoabuelkher
