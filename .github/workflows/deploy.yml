@@ -24,5 +24,10 @@ jobs:
           ssh-keyscan -H $SERVER_IP >> ~/.ssh/known_hosts
 
       - name: Deploy Code to Server
+        working-directory: /home/zizoabuelkher/gard
+        env:
+          SERVER_IP: ${{ secrets.SERVER_IP }}
+          SSH_USERNAME: zizoabuelkher
+        
         run: |
-          ssh zizoabuelkher@$SERVER_IP "cd /home/zizoabuelkher/gard && git pull && docker-compose up --build -d"
+          ssh $SSH_USERNAME@$SERVER_IP "cd /home/$SSH_USERNAME/gard && git pull && docker-compose up --build -d"
