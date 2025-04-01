@@ -16,7 +16,7 @@ jobs:
       - name: Set up SSH Key
         env:
           SSH_PRIVATE_KEY: ${{secrets.SSH_PRIVATE_KEY}}
-          SERVER_IP: 34.165.223.128
+          SERVER_IP: ${{secrets.SERVER_IP}}
         run: |
           mkdir -p ~/.ssh
           echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
@@ -25,9 +25,8 @@ jobs:
 
       - name: Deploy Code to Server
         env:
-          SERVER_IP: 34.165.223.128
+          SERVER_IP: ${{ secrets.SERVER_IP }}
           SSH_USERNAME: zizoabuelkher
         
         run: |
-            ssh $SSH_USERNAME@$SERVER_IP "whoami && hostname && pwd "
-
+          ssh $SSH_USERNAME@$SERVER_IP "cd gard && git pull && docker-compose up --build -d"
