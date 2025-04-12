@@ -13,7 +13,7 @@ router = APIRouter(
 class updateCategoryOrderRequest(BaseModel):
     category_ids: List[int]
 
-@router.get("/", description="fetch all categories in branch, and it order category in random order and continue with this order if user"
+@router.get("", description="fetch all categories in branch, and it order category in random order and continue with this order if user"
 "doesn't change order")
 def get_categories_in_branch(branch : BranchDep, session : SessionDep):
     branch_service = BranchService(branch, session)

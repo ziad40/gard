@@ -13,7 +13,7 @@ router = APIRouter(
         tags=["products"]
     )
 
-@router.get("/", description="fetch all products of specific category in branch, and it order products in random order and continue with this order if user"
+@router.get("", description="fetch all products of specific category in branch, and it order products in random order and continue with this order if user"
 "doesn't change order")
 def get_products_in_category_in_branch(category_id: int, branch : BranchDep, session : SessionDep):
     branch_service = BranchService(branch, session)
