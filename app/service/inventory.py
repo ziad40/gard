@@ -34,8 +34,19 @@ class InventoryService:
         
         if not branch_category:
             raise ValueError("Category not found in the branch")
-        
-        history = History(branch_id=self.branch.id, category_id=category_id, next_product_order=1)
+        branch_category_product:BranchCategoryProduct = self.session.exec(
+            select(BranchCategoryProduct).where(
+                and_(
+                    BranchCategoryProduct.branch_category_branch_id == self.branch.id,
+                    BranchCategoryProduct.branch_category_category_id == category_id,
+                    BranchCategoryProduct.priority == 1
+                )
+            )
+        ).first()
+        if not branch_category_product:
+            raise ValueError("Category not found in the branch")
+        history = History(branch_id=self.branch.id, category_id=category_id, next_product_order=1,
+                           prev_product_id=branch_category_product.product_id)
         self.session.add(history)
         self.session.commit()
         self.session.refresh(history)
