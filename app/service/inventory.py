@@ -54,7 +54,7 @@ class InventoryService:
     def get_next_product_in_category(self, request:"NextProductRequest", image : UploadFile):
         history:History = self.session.exec(
             select(History).where(
-                History.id == request.iventory_id
+                History.id == request.inventory_id
             )
         ).first()
 
@@ -96,10 +96,10 @@ class InventoryService:
         self.session.commit()
         return product
 
-    def get_current_product_in_category(self, iventory_id:int):
+    def get_current_product_in_category(self, inventory_id:int):
         history:History = self.session.exec(
             select(History).where(
-                History.id == iventory_id
+                History.id == inventory_id
             )
         ).first()
 
