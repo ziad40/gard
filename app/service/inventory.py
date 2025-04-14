@@ -99,7 +99,10 @@ class InventoryService:
     def get_current_product_in_category(self, inventory_id:int):
         history:History = self.session.exec(
             select(History).where(
-                History.id == inventory_id
+                and_(
+                    History.id == inventory_id,
+                    History.next_product_order != -1
+                )
             )
         ).first()
 
