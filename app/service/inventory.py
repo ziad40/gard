@@ -110,7 +110,7 @@ class InventoryService:
                 and_(
                     BranchCategoryProduct.branch_category_branch_id == self.branch.id,
                     BranchCategoryProduct.branch_category_category_id == history.category_id,
-                    BranchCategoryProduct.priority == history.next_product_order-1
+                    BranchCategoryProduct.product_id == history.prev_product_id
                 )
             )
         ).first()
