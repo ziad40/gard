@@ -17,3 +17,4 @@ class BranchCategory(SQLModel, table=True):
         UniqueConstraint("branch_id", "category_id", name="uq_branch_category"),
         UniqueConstraint("branch_id", "priority", name="uq_branch_priority")
     )
+    
