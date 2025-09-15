@@ -1,5 +1,7 @@
 # Gard Inventory Management System
-
+https://img.shields.io/badge/FastAPI-009688?style=for-the-badge&logo=fastapi&logoColor=white
+https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white
+https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white
 Gard is an inventory management system built with FastAPI, SQLModel, and MySQL. It allows branches to manage categories, products, and inventory processes, with history tracking and media uploads.
 
 ## Features
