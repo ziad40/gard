@@ -7,7 +7,7 @@ services:
     restart: always
     env_file: .env
     environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD}  # Root password (don't use in production)
+      MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD}  # Root password
       MYSQL_DATABASE: ${MYSQL_DB}  # Auto-create database
       MYSQL_USER: ${MYSQL_USER}  # Auto-create user
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}  # Password for the user
