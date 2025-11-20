@@ -1,6 +1,6 @@
 # Gard Inventory Management System
 
-Gard is an inventory management system built with FastAPI, SQLModel, and MySQL. It allows branches to manage categories, products, and inventory processes, with history tracking and media uploads.
+Gard is an inventory management system built with FastAPI, SQLModel, and MySQL. It allows stores to manage categories, products, and inventory processes, with history tracking and media uploads.
 ## Tech Stack
 
 ![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
